@@ -25,4 +25,36 @@ export class ProductsService {
   async findAll() {
     return this.prisma.products.findMany();
   }
+
+  async update(id: string, data: ProductsDTO) {
+    const productsExists = await this.prisma.products.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!productsExists) {
+      throw new Error('This products dont exists :/');
+    }
+    return await this.prisma.products.update({
+      data,
+      where: {
+        id,
+      },
+    });
+  }
+  async delete(id: string) {
+    const productsExist = await this.prisma.products.findUnique({
+      where: {
+        id,
+      },
+    });
+    if (!productsExist) {
+      throw new Error('This product dont exist');
+    }
+    return await this.prisma.products.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }
